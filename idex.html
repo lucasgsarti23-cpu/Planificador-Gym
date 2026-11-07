@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Rutinas de Entrenamiento</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fafafa;color:#333;max-width:640px;margin:auto;padding-bottom:80px}
+header{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 16px;position:sticky;top:0;z-index:5}
+header h1{font-size:18px;color:#d32f2f}
+main{padding:14px}
+h2{font-size:16px;margin-bottom:8px;color:#333}
+h3{font-size:14px;color:#d32f2f;margin:14px 0 6px}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:12px;margin-bottom:10px;cursor:pointer}
+.muted{color:#888;font-size:13px}
+button{font:inherit;cursor:pointer;border:none;border-radius:8px;padding:10px 14px;background:#eee;color:#333}
+.primary{background:#d32f2f;color:#fff}
+.ghost{background:#fff;border:1px solid #ddd}
+.danger{background:#fff;color:#d32f2f;border:1px solid #f0c4c4}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.btnfull{width:100%;margin-top:8px}
+label{display:block;font-size:12px;color:#666;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff}
+textarea{min-height:70px;resize:vertical}
+.seg{display:flex;background:#eee;border-radius:10px;padding:3px;gap:3px;margin:14px 0 10px}
+.seg button{flex:1;background:transparent;padding:8px 4px;font-size:13px}
+.seg button.on{background:#fff;color:#d32f2f;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{white-space:nowrap;background:#fff;border:1px solid #ddd;padding:7px 12px;font-size:13px}
+.chips button.on{background:#d32f2f;color:#fff;border-color:#d32f2f}
+.ej{display:flex;gap:10px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:10px;margin-bottom:10px}
+.thumb{width:96px;height:96px;flex:none;border-radius:8px;background:#f0f0f0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:11px;text-align:center}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.ej .info{flex:1;min-width:0}
+.dos{display:inline-block;background:#fdecec;color:#d32f2f;font-size:12px;padding:3px 8px;border-radius:20px;margin:4px 0}
+.acts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.acts button{padding:5px 10px;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;max-width:640px;margin:auto;background:#fff;border-top:1px solid #e5e5e5;display:flex;z-index:10}
+nav button{flex:1;border-radius:0;background:#fff;padding:14px;color:#888}
+nav button.on{color:#d32f2f;font-weight:600;box-shadow:inset 0 3px 0 #d32f2f}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:#fff;width:100%;max-width:640px;max-height:90vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px}
+#printArea{display:none}
+@media print{
+  #app,header,nav{display:none!important}
+  #printArea{display:block!important;color:#000;padding:20px;font-size:12px}
+  #printArea h1{color:#d32f2f;font-size:20px;margin-bottom:6px}
+  #printArea h2{color:#333;font-size:15px;margin-top:14px;border-bottom:2px solid #d32f2f;padding-bottom:3px}
+  #printArea h3{color:#d32f2f;font-size:13px;margin:8px 0 4px}
+  .pb{page-break-inside:avoid;border:1px solid #ccc;border-radius:6px;padding:8px;margin:6px 0;display:flex;gap:10px;align-items:flex-start}
+  .pb img{width:110px;height:auto;border-radius:4px}
+}
+</style>
+</head>
+<body>
+<header><h1>🏋️ Rutinas de Entrenamiento</h1></header>
+<main id="app"></main>
+<nav>
+  <button id="n1" onclick="go('planillas')">📋 Planillas</button>
+  <button id="n2" onclick="go('alumnos')">👥 Alumnos</button>
+</nav>
+<div id="printArea"></div>
+<script>
+const TIPOS=['Fuerza','Resistencia','Velocidad','Equilibrio','Coordinación','Flexibilidad','Movilidad'];
+const BL={calentamiento:'Entrada en calor',central:'Parte central',enfriamiento:'Enfriamiento'};
+let db=load();
+let vista='planillas', cur=null, bloque='calentamiento', tipo='Fuerza', alumnoSel=null;
+function load(){try{return JSON.parse(localStorage.getItem('rutDB'))||{alumnos:[],sesiones:[]}}catch(e){return{alumnos:[],sesiones:[]}}}
+function save(){try{localStorage.setItem('rutDB',JSON.stringify(db));return true}catch(e){alert('Memoria llena. Elimina planillas o imágenes antiguas.');return false}}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const ses=id=>db.sesiones.find(s=>s.id===id);
+const alu=id=>db.alumnos.find(a=>a.id===id);
+function nueva(){return{id:uid(),nombre:'',alumnoId:'',sujeto:{nombre:'',edad:'',info:''},fecha:new Date().toISOString().slice(0,10),objetivo:'',ej:[]}}
+function go(v,arg){
+  if(v==='editor'){cur=arg?JSON.parse(JSON.stringify(arg)):nueva();bloque='calentamiento';tipo='Fuerza';}
+  if(v==='alumno'){alumnoSel=arg;}
+  vista=v;render();window.scrollTo(0,0);
+}
+function render(){
+  $('n1').className=(vista==='planillas'||vista==='editor')?'on':'';
+  $('n2').className=(vista==='alumnos'||vista==='alumno')?'on':'';
+  if(vista==='planillas')renderPlanillas();
+  else if(vista==='editor')renderEditor();
+  else if(vista==='alumnos')renderAlumnos();
+  else if(vista==='alumno')renderAlumno();
+}
+/* ---------- PLANILLAS ---------- */
+function renderPlanillas(){
+  const lista=[...db.sesiones].sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
+  $('app').innerHTML=`
+    <div class="row" style="margin-bottom:12px"><button class="primary" onclick="go('editor')">+ Nueva clase</button></div>
+    ${lista.length?lista.map(s=>`
+      <div class="card" onclick="go('editor',ses('${s.id}'))">
+        <div class="row" style="align-items:center">
+          <div><b>${esc(s.nombre)||'Sin nombre'}</b><div class="muted">${esc(s.sujeto.nombre)||'Sin sujeto'} · ${esc(s.fecha)}</div>
+          <div class="muted">${s.ej.length} ejercicio(s)</div></div>
+          <button class="danger" style="flex:none" onclick="event.stopPropagation();borrarSesion('${s.id}')">🗑</button>
+        </div>
+      </div>`).join(''):'<p class="muted">Todavía no tienes planillas. Crea la primera con "+ Nueva clase".</p>'}`;
+}
+function borrarSesion(id){
+  if(!confirm('¿Eliminar esta planilla?'))return;
+  db.sesiones=db.sesiones.filter(s=>s.id!==id);save();render();
+}
+/* ---------- EDITOR DE CLASE ---------- */
+function renderEditor(){
+  const lista=cur.ej.filter(e=>e.bloque===bloque&&e.tipo===tipo);
+  $('app').innerHTML=`
+    <div class="row"><button class="ghost" style="flex:none" onclick="go('planillas')">← Volver</button></div>
+    <h2 style="margin-top:12px">Planilla de clase</h2>
+    <label>Nombre de la planilla</label>
+    <input value="${esc(cur.nombre)}" oninput="cur.nombre=this.value">
+    <label>Alumno registrado</label>
+    <select onchange="asignarAlumno(this.value)">
+      <option value="">— Manual —</option>
+      ${db.alumnos.map(a=>`<option value="${a.id}" ${a.id===cur.alumnoId?'selected':''}>${esc(a.nombre)}</option>`).join('')}
+    </select>
+    <div class="row">
+      <div><label>Sujeto</label><input value="${esc(cur.sujeto.nombre)}" oninput="cur.sujeto.nombre=this.value"></div>
+      <div style="flex:.5"><label>Edad</label><input value="${esc(cur.sujeto.edad)}" oninput="cur.sujeto.edad=this.value"></div>
+    </div>
+    <label>Datos adicionales</label>
+    <input value="${esc(cur.sujeto.info)}" oninput="cur.sujeto.info=this.value">
+    <label>Fecha</label>
+    <input type="date" value="${esc(cur.fecha)}" oninput="cur.fecha=this.value">
+    <label>Objetivo de la sesión</label>
+    <textarea oninput="cur.objetivo=this.value">${esc(cur.objetivo)}</textarea>
+    <div class="seg">${Object.entries(BL).map(([k,v])=>`<button class="${k===bloque?'on':''}" onclick="bloque='${k}';renderEditor()">${v}</button>`).join('')}</div>
+    <div class="chips">${TIPOS.map(t=>`<button class="${t===tipo?'on':''}" onclick="tipo='${t}';renderEditor()">${t}</button>`).join('')}</div>
+    ${lista.length?lista.map(ejHTML).join(''):'<p class="muted" style="margin:8px 0">Sin ejercicios en esta sección.</p>'}
+    <button class="ghost btnfull" onclick="modalEj()">+ Agregar ejercicio</button>
+    <div class="row" style="margin-top:18px">
+      <button class="ghost" onclick="guardarClase(true)">💾 Guardar clase</button>
+      <button class="primary" onclick="pdf()">📄 Guardar PDF</button>
+    </div>`;
+}
+function ejHTML(e){
+  return `<div class="ej">
+    <div class="thumb">${e.img?`<img src="${e.img}">`:'Sin imagen'}</div>
+    <div class="info">
+      <b>${esc(e.nombre)}</b><br>
+      <span class="dos">${esc(e.series)||'-'} series × ${esc(e.reps)||'-'} reps</span>
+      <div class="muted">${esc(e.desc)}</div>
+      <div class="acts">
+        <button class="ghost" onclick="modalEj('${e.id}')">Editar</button>
+        <button class="danger" onclick="borrarEj('${e.id}')">Eliminar</button>
+      </div>
+    </div>
+  </div>`;
+}
+function asignarAlumno(id){
+  cur.alumnoId=id;
+  const a=alu(id);
+  if(a)cur.sujeto={nombre:a.nombre,edad:a.edad,info:a.objetivo||''};
+  renderEditor();
+}
+function borrarEj(id){cur.ej=cur.ej.filter(e=>e.id!==id);renderEditor();}
+function guardarClase(mostrar){
+  if(!cur.nombre.trim())cur.nombre='Clase '+cur.fecha;
+  const i=db.sesiones.findIndex(s=>s.id===cur.id);
+  if(i>=0)db.sesiones[i]=cur;else db.sesiones.push(cur);
+  const ok=save();
+  if(ok&&mostrar)alert('Clase guardada ✔');
+  return ok;
+}
+/* ---------- MODAL EJERCICIO ---------- */
+function modalEj(id){
+  const e=id?cur.ej.find(x=>x.id===id):{id:uid(),nombre:'',series:'',reps:'',desc:'',img:'',tipo,bloque};
+  let imgTemp=e.img||'';
+  openModal(`
+    <h2>${id?'Editar':'Nuevo'} ejercicio</h2>
+    <label>Nombre</label>
+    <input id="m_n" value="${esc(e.nombre)}">
+    <div class="row">
+      <div><label>Tipo</label><select id="m_t">${TIPOS.map(t=>`<option ${t===e.tipo?'selected':''}>${t}</option>`).join('')}</select></div>
+      <div><label>Bloque</label><select id="m_b">${Object.entries(BL).map(([k,v])=>`<option value="${k}" ${k===e.bloque?'selected':''}>${v}</option>`).join('')}</select></div>
+    </div>
+    <div class="row">
+      <div><label>Series</label><input id="m_s" value="${esc(e.series)}" inputmode="numeric"></div>
+      <div><label>Repeticiones</label><input id="m_r" value="${esc(e.reps)}"></div>
+    </div>
+    <label>Descripción de la intención</label>
+    <textarea id="m_d">${esc(e.desc)}</textarea>
+    <label>Imagen (opcional, se comprime sola)</label>
+    <input type="file" accept="image/*" id="m_i">
+    <div class="acts"><button class="danger" id="m_x">Quitar imagen</button></div>
+    <div class="row" style="margin-top:14px">
+      <button class="ghost" onclick="closeModal()">Cancelar</button>
+      <button class="primary" id="m_ok">Guardar</button>
+    </div>`);
+  $('m_i').onchange=async ev=>{const f=ev.target.files[0];if(f)imgTemp=await comprimir(f);};
+  $('m_x').onclick=()=>{imgTemp='';alert('Imagen quitada. Pulsa Guardar para confirmar.');};
+  $('m_ok').onclick=()=>{
+    const n=$('m_n').value.trim();
+    if(!n){alert('Escribe un nombre para el ejercicio');return;}
+    const nuevo={...e,nombre:n,tipo:$('m_t').value,bloque:$('m_b').value,series:$('m_s').value,reps:$('m_r').value,desc:$('m_d').value,img:imgTemp};
+    const i=cur.ej.findIndex(x=>x.id===e.id);
+    if(i>=0)cur.ej[i]=nuevo;else cur.ej.push(nuevo);
+    tipo=nuevo.tipo;bloque=nuevo.bloque;
+    closeModal();renderEditor();
+  };
+}
+function comprimir(file){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      const im=new Image();
+      im.onload=()=>{
+        const max=400,k=Math.min(1,max/Math.max(im.width,im.height));
+        const c=document.createElement('canvas');
+        c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+        c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+        res(c.toDataURL('image/jpeg',0.6));
+      };
+      im.onerror=()=>res('');
+      im.src=r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+function openModal(h){
+  closeModal();
+  const d=document.createElement('div');
+  d.className='modal';d.id='mod';
+  d.innerHTML=`<div class="sheet">${h}</div>`;
+  d.onclick=e=>{if(e.target===d)closeModal();};
+  document.body.appendChild(d);
+}
+function closeModal(){const m=$('mod');if(m)m.remove();}
+/* ---------- PDF ---------- */
+function pdf(){
+  guardarClase(false);
+  $('printArea').innerHTML=`
+    <h1>${esc(cur.nombre)}</h1>
+    <p><b>Sujeto:</b> ${esc(cur.sujeto.nombre)} ${cur.sujeto.edad?'· '+esc(cur.sujeto.edad)+' años':''} ${esc(cur.sujeto.info)}</p>
+    <p><b>Fecha:</b> ${esc(cur.fecha)}</p>
+    <p><b>Objetivo:</b> ${esc(cur.objetivo)}</p>
+    ${Object.entries(BL).map(([k,v])=>`
+      <h2>${v}</h2>
+      ${TIPOS.map(t=>{
+        const l=cur.ej.filter(e=>e.bloque===k&&e.tipo===t);
+        return l.length?`<h3>${t}</h3>`+l.map(e=>`
+          <div class="pb">
+            ${e.img?`<img src="${e.img}">`:''}
+            <div><b>${esc(e.nombre)}</b> — ${esc(e.series)} series × ${esc(e.reps)} reps<br>${esc(e.desc)}</div>
+          </div>`).join(''):'';
+      }).join('')}`).join('')}`;
+  window.print();
+}
+/* ---------- ALUMNOS ---------- */
+function renderAlumnos(){
+  const lista=[...db.alumnos].sort((a,b)=>a.nombre.localeCompare(b.nombre));
+  $('app').innerHTML=`
+    <div class="row" style="margin-bottom:12px"><button class="primary" onclick="modalAlumno()">+ Nuevo alumno</button></div>
+    ${lista.length?lista.map(a=>`
+      <div class="card" onclick="go('alumno','${a.id}')">
+        <b>${esc(a.nombre)}</b>
+        <div class="muted">${esc(a.edad)?esc(a.edad)+' años · ':''}${db.sesiones.filter(s=>s.alumnoId===a.id).length} sesión(es) registrada(s)</div>
+      </div>`).join(''):'<p class="muted">No hay alumnos registrados.</p>'}`;
+}
+function modalAlumno(id){
+  const a=id?alu(id):{id:uid(),nombre:'',edad:'',contacto:'',objetivo:'',notas:''};
+  openModal(`
+    <h2>${id?'Editar':'Nuevo'} alumno</h2>
+    <label>Nombre</label><input id="a_n" value="${esc(a.nombre)}">
+    <div class="row">
+      <div><label>Edad</label><input id="a_e" value="${esc(a.edad)}" inputmode="numeric"></div>
+      <div><label>Contacto</label><input id="a_c" value="${esc(a.contacto)}"></div>
+    </div>
+    <label>Objetivo general</label><input id="a_o" value="${esc(a.objetivo)}">
+    <label>Notas</label><textarea id="a_notas">${esc(a.notas)}</textarea>
+    <div class="row" style="margin-top:14px">
+      <button class="ghost" onclick="closeModal()">Cancelar</button>
+      <button class="primary" id="a_ok">Guardar</button>
+    </div>`);
+  $('a_ok').onclick=()=>{
+    const n=$('a_n').value.trim();
+    if(!n){alert('Escribe el nombre del alumno');return;}
+    const nuevo={...a,nombre:n,edad:$('a_e').value,contacto:$('a_c').value,objetivo:$('a_o').value,notas:$('a_notas').value};
+    const i=db.alumnos.findIndex(x=>x.id===a.id);
+    if(i>=0)db.alumnos[i]=nuevo;else db.alumnos.push(nuevo);
+    save();closeModal();render();
+  };
+}
+function borrarAlumno(id){
+  if(!confirm('¿Eliminar al alumno? Sus planillas se conservarán sin asignar.'))return;
+  db.alumnos=db.alumnos.filter(a=>a.id!==id);
+  db.sesiones.forEach(s=>{if(s.alumnoId===id)s.alumnoId='';});
+  save();go('alumnos');
+}
+function nuevaParaAlumno(id){
+  const a=alu(id), c=nueva();
+  c.alumnoId=id;
+  c.sujeto={nombre:a.nombre,edad:a.edad,info:a.objetivo||''};
+  go('editor',c);
+}
+function renderAlumno(){
+  const a=alu(alumnoSel);
+  if(!a){vista='alumnos';renderAlumnos();return;}
+  const sesiones=db.sesiones.filter(s=>s.alumnoId===a.id).sort((x,y)=>(y.fecha||'').localeCompare(x.fecha||''));
+  $('app').innerHTML=`
+    <div class="row"><button class="ghost" style="flex:none" onclick="go('alumnos')">← Volver</button></div>
+    <div class="card" style="margin-top:12px;cursor:default">
+      <h2>${esc(a.nombre)}</h2>
+      <div class="muted">Edad: ${esc(a.edad)||'-'} · Contacto: ${esc(a.contacto)||'-'}</div>
+      <p style="margin-top:8px"><b>Objetivo:</b> ${esc(a.objetivo)||'-'}</p>
+      ${a.notas?`<p class="muted" style="margin-top:4px">${esc(a.notas)}</p>`:''}
+      <div class="acts">
+        <button class="ghost" onclick="modalAlumno('${a.id}')">Editar datos</button>
+        <button class="danger" onclick="borrarAlumno('${a.id}')">Eliminar alumno</button>
+      </div>
+    </div>
+    <button class="primary btnfull" onclick="nuevaParaAlumno('${a.id}')">+ Nueva clase para este alumno</button>
+    <h2 style="margin-top:18px">Sesiones realizadas (${sesiones.length})</h2>
+    ${sesiones.length?sesiones.map(s=>`
+      <div class="card" onclick="go('editor',ses('${s.id}'))">
+        <b>${esc(s.nombre)}</b>
+        <div class="muted">${esc(s.fecha)} · ${s.ej.length} ejercicio(s)</div>
+        ${s.objetivo?`<div class="muted">Objetivo: ${esc(s.objetivo)}</div>`:''}
+      </div>`).join(''):'<p class="muted">Todavía no hay sesiones para este alumno.</p>'}`;
+}
+render();
+</script>
+</body>
+</html>
