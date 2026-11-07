@@ -32,8 +32,11 @@ textarea{min-height:70px;resize:vertical}
 .chips button{white-space:nowrap;background:#fff;border:1px solid #ddd;padding:7px 12px;font-size:13px}
 .chips button.on{background:#d32f2f;color:#fff;border-color:#d32f2f}
 .ej{display:flex;gap:10px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:10px;margin-bottom:10px}
-.thumb{width:96px;height:96px;flex:none;border-radius:8px;background:#f0f0f0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:11px;text-align:center}
-.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb{width:68px;height:68px;flex:none;border-radius:7px;background:#f3f3f3;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:10px;text-align:center}
+.thumb img{width:100%;height:100%;object-fit:contain}
+.order-btn{min-width:30px;padding:4px 7px!important;font-size:13px!important;color:#777;background:#f7f7f7;border:1px solid #e8e8e8}
+.order-btn:disabled{opacity:.28;cursor:default}
+@media(max-width:380px){.ej{gap:8px;padding:8px}.thumb{width:58px;height:58px}}
 .ej .info{flex:1;min-width:0}
 .dos{display:inline-block;background:#fdecec;color:#d32f2f;font-size:12px;padding:3px 8px;border-radius:20px;margin:4px 0}
 .acts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
@@ -51,7 +54,7 @@ nav button.on{color:#d32f2f;font-weight:600;box-shadow:inset 0 3px 0 #d32f2f}
   #printArea h2{color:#333;font-size:15px;margin-top:14px;border-bottom:2px solid #d32f2f;padding-bottom:3px}
   #printArea h3{color:#d32f2f;font-size:13px;margin:8px 0 4px}
   .pb{page-break-inside:avoid;border:1px solid #ccc;border-radius:6px;padding:8px;margin:6px 0;display:flex;gap:10px;align-items:flex-start}
-  .pb img{width:110px;height:auto;border-radius:4px}
+  .pb img{width:64px;height:64px;object-fit:contain;border-radius:4px;flex:none}
 }
 </style>
 </head>
@@ -147,6 +150,10 @@ function ejHTML(e){
       <span class="dos">${esc(e.series)||'-'} series × ${esc(e.reps)||'-'} reps</span>
       <div class="muted">${esc(e.desc)}</div>
       <div class="acts">
+        <button class="order-btn" title="Subir ejercicio" aria-label="Subir ejercicio"
+          onclick="moverEj('${e.id}',-1)" ${!puedeMover(e.id,-1)?'disabled':''}>↑</button>
+        <button class="order-btn" title="Bajar ejercicio" aria-label="Bajar ejercicio"
+          onclick="moverEj('${e.id}',1)" ${!puedeMover(e.id,1)?'disabled':''}>↓</button>
         <button class="ghost" onclick="modalEj('${e.id}')">Editar</button>
         <button class="danger" onclick="borrarEj('${e.id}')">Eliminar</button>
       </div>
@@ -157,6 +164,27 @@ function asignarAlumno(id){
   cur.alumnoId=id;
   const a=alu(id);
   if(a)cur.sujeto={nombre:a.nombre,edad:a.edad,info:a.objetivo||''};
+  renderEditor();
+}
+function indicesGrupoEj(id){
+  const actual=cur.ej.find(e=>e.id===id);
+  if(!actual)return [];
+  return cur.ej.map((e,i)=>({e,i}))
+    .filter(x=>x.e.bloque===actual.bloque&&x.e.tipo===actual.tipo)
+    .map(x=>x.i);
+}
+function puedeMover(id,delta){
+  const indices=indicesGrupoEj(id);
+  const posicion=indices.indexOf(cur.ej.findIndex(e=>e.id===id));
+  return posicion>=0&&posicion+delta>=0&&posicion+delta<indices.length;
+}
+function moverEj(id,delta){
+  const indices=indicesGrupoEj(id);
+  const indice=cur.ej.findIndex(e=>e.id===id);
+  const posicion=indices.indexOf(indice);
+  const destino=indices[posicion+delta];
+  if(posicion<0||destino===undefined)return;
+  [cur.ej[indice],cur.ej[destino]]=[cur.ej[destino],cur.ej[indice]];
   renderEditor();
 }
 function borrarEj(id){cur.ej=cur.ej.filter(e=>e.id!==id);renderEditor();}
