@@ -1,358 +1,217 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Rutinas de Entrenamiento</title>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entrenamiento · Planificador</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fafafa;color:#333;max-width:640px;margin:auto;padding-bottom:80px}
-header{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 16px;position:sticky;top:0;z-index:5}
-header h1{font-size:18px;color:#d32f2f}
-main{padding:14px}
-h2{font-size:16px;margin-bottom:8px;color:#333}
-h3{font-size:14px;color:#d32f2f;margin:14px 0 6px}
-.card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:12px;margin-bottom:10px;cursor:pointer}
-.muted{color:#888;font-size:13px}
-button{font:inherit;cursor:pointer;border:none;border-radius:8px;padding:10px 14px;background:#eee;color:#333}
-.primary{background:#d32f2f;color:#fff}
-.ghost{background:#fff;border:1px solid #ddd}
-.danger{background:#fff;color:#d32f2f;border:1px solid #f0c4c4}
-.row{display:flex;gap:8px}
-.row>*{flex:1}
-.btnfull{width:100%;margin-top:8px}
-label{display:block;font-size:12px;color:#666;margin:10px 0 4px}
-input,select,textarea{width:100%;font:inherit;padding:10px;border:1px solid #ddd;border-radius:8px;background:#fff}
-textarea{min-height:70px;resize:vertical}
-.seg{display:flex;background:#eee;border-radius:10px;padding:3px;gap:3px;margin:14px 0 10px}
-.seg button{flex:1;background:transparent;padding:8px 4px;font-size:13px}
-.seg button.on{background:#fff;color:#d32f2f;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.1)}
-.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chips button{white-space:nowrap;background:#fff;border:1px solid #ddd;padding:7px 12px;font-size:13px}
-.chips button.on{background:#d32f2f;color:#fff;border-color:#d32f2f}
-.ej{display:flex;gap:10px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:10px;margin-bottom:10px}
-.thumb{width:68px;height:68px;flex:none;border-radius:7px;background:#f3f3f3;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:10px;text-align:center}
-.thumb img{width:100%;height:100%;object-fit:contain}
-.order-btn{min-width:30px;padding:4px 7px!important;font-size:13px!important;color:#777;background:#f7f7f7;border:1px solid #e8e8e8}
-.order-btn:disabled{opacity:.28;cursor:default}
-@media(max-width:380px){.ej{gap:8px;padding:8px}.thumb{width:58px;height:58px}}
-.ej .info{flex:1;min-width:0}
-.dos{display:inline-block;background:#fdecec;color:#d32f2f;font-size:12px;padding:3px 8px;border-radius:20px;margin:4px 0}
-.acts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
-.acts button{padding:5px 10px;font-size:12px}
-nav{position:fixed;bottom:0;left:0;right:0;max-width:640px;margin:auto;background:#fff;border-top:1px solid #e5e5e5;display:flex;z-index:10}
-nav button{flex:1;border-radius:0;background:#fff;padding:14px;color:#888}
-nav button.on{color:#d32f2f;font-weight:600;box-shadow:inset 0 3px 0 #d32f2f}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;z-index:20}
-.sheet{background:#fff;width:100%;max-width:640px;max-height:90vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px}
-#printArea{display:none}
-@media print{
-  #app,header,nav{display:none!important}
-  #printArea{display:block!important;color:#000;padding:20px;font-size:12px}
-  #printArea h1{color:#d32f2f;font-size:20px;margin-bottom:6px}
-  #printArea h2{color:#333;font-size:15px;margin-top:14px;border-bottom:2px solid #d32f2f;padding-bottom:3px}
-  #printArea h3{color:#d32f2f;font-size:13px;margin:8px 0 4px}
-  .pb{page-break-inside:avoid;border:1px solid #ccc;border-radius:6px;padding:8px;margin:6px 0;display:flex;gap:10px;align-items:flex-start}
-  .pb img{width:64px;height:64px;object-fit:contain;border-radius:4px;flex:none}
-}
-</style>
-</head>
-<body>
-<header><h1>🏋️ Rutinas de Entrenamiento</h1></header>
-<main id="app"></main>
-<nav>
-  <button id="n1" onclick="go('planillas')">📋 Planillas</button>
-  <button id="n2" onclick="go('alumnos')">👥 Alumnos</button>
-</nav>
-<div id="printArea"></div>
+:root{--bg:#f2e9d8;--card:#fbf6ea;--ink:#1d1b1a;--tq:#1c9a98;--vi:#6b4aa0;--tan:#c8a679;--mut:#7a6d5a;--ln:#dccdb0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1714;--card:#25211c;--ink:#f1e8d8;--tq:#3cc4c0;--vi:#a98bdc;--tan:#8c7452;--mut:#b3a58d;--ln:#3a342b}}
+:root[data-theme="dark"]{--bg:#1a1714;--card:#25211c;--ink:#f1e8d8;--tq:#3cc4c0;--vi:#a98bdc;--tan:#8c7452;--mut:#b3a58d;--ln:#3a342b}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Nunito,system-ui,sans-serif;background-image:radial-gradient(circle at 8% 5%,#1c9a9822,transparent 40%),radial-gradient(circle at 95% 20%,#6b4aa01f,transparent 38%)}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;margin:0}
+header.top{padding:22px 20px 8px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+header.top h1{font-size:28px}header.top span{color:var(--mut);font-style:italic}
+nav{display:flex;gap:8px;padding:8px 20px;overflow-x:auto}
+nav button{border:1.5px solid var(--ln);background:var(--card);color:var(--ink);padding:9px 18px;border-radius:30px 14px 30px 14px;font:600 14px Nunito;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--vi);color:#fff;border-color:var(--vi)}
+main{padding:10px 20px 40px;max-width:1100px;margin:auto}
+.card{background:var(--card);border:1.5px solid var(--ln);border-radius:28px 12px 30px 14px;padding:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--ln);border-radius:14px;padding:8px 12px;min-width:0}
+.btn{border:0;background:var(--tq);color:#fff;padding:9px 16px;border-radius:30px;font:700 14px Nunito;cursor:pointer}
+.btn.vi{background:var(--vi)}.btn.bk{background:#1d1b1a;color:#f2e9d8}.btn.gh{background:transparent;color:var(--ink);border:1.5px solid var(--ln)}
+.sm{border:1.5px solid var(--ln);background:var(--bg);color:var(--ink);border-radius:10px;padding:2px 8px;cursor:pointer;font-size:13px}
+.blk{margin:12px 0;padding:12px;border:1.5px dashed var(--ln);border-radius:22px 10px 24px 12px}
+.blk.on{border:1.5px solid var(--tq);background:#1c9a9810}
+.blk header{display:flex;gap:8px;margin-bottom:6px}.blk header input{flex:1;font-weight:700;font-family:Fraunces,serif}
+.it,.pk{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px;margin:4px 0;background:var(--card);border-radius:14px;border:1px solid var(--ln)}
+.it .a{display:flex;gap:4px;flex-shrink:0}
+.dt{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.5px solid #0004;margin-right:3px;vertical-align:-1px}
+.sp{font-size:12px;color:var(--mut)}
+.tag{font-size:11px;padding:1px 9px;border-radius:20px;background:var(--tan);color:#1d1b1a;margin-left:6px}
+.tag.Principiante{background:#9fdad6;color:#0d3b3a}.tag.Intermedio{background:#cdbbec;color:#2c1a50}.tag.Avanzado{background:#1d1b1a;color:#f2e9d8}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1.5px solid var(--ln);background:var(--card);color:var(--ink);border-radius:20px;padding:4px 14px;cursor:pointer;font:600 13px Nunito}
+.chip.on{background:var(--tq);color:#fff;border-color:var(--tq)}
+.eg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.ec{background:var(--card);border:1.5px solid var(--ln);border-radius:26px 10px 26px 12px;overflow:hidden}
+.ec .im{height:110px;width:100%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:42px;background:linear-gradient(135deg,#1c9a9833,#6b4aa033,#c8a67944)}
+.ec .bd{padding:10px 12px}.ec h3{font-size:16px}
+.grp{margin:16px 0 6px;color:var(--vi);font:600 18px Fraunces,serif}
+.empty{color:var(--mut);font-style:italic;padding:12px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1d1b1a;color:#f2e9d8;padding:10px 20px;border-radius:30px;display:none;z-index:9}
+#print{display:none}
+@media print{body>*:not(#print){display:none!important}#print{display:block;color:#000;background:#fff;padding:10px;font-family:Georgia,serif}#print h1{color:#1c9a98}#print .pb{margin:14px 0}#print li{margin:4px 0}#print img{width:38px;height:38px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:8px}}
+.mo{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:16px;z-index:8}.mo[hidden]{display:none}#mdl{max-width:640px;width:100%;max-height:90vh;overflow:auto}
+textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--ln);border-radius:14px;padding:8px 12px;min-height:70px}
+.th{width:44px;height:44px;object-fit:cover;border-radius:12px}.dz{border:2px dashed var(--tan);border-radius:18px;padding:14px;text-align:center;color:var(--mut);cursor:pointer;margin:10px 0 6px}.pg{justify-content:center;margin-top:14px}
+.paper{background:var(--bg);border:1.5px solid var(--ln);border-radius:20px;padding:14px;max-height:55vh;overflow:auto}.gl{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}@media(max-width:800px){.gl{grid-template-columns:1fr}}.gside{background:var(--bg);border:1.5px solid var(--ln);border-radius:20px;padding:12px;font-size:13px;align-self:start}.gside label{font-size:12px;color:var(--mut)}.pr{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dotted var(--ln)}.bar{height:10px;border-radius:6px;background:var(--ln);overflow:hidden;margin:6px 0}.bar i{display:block;height:100%}img.th,img.im{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:zoom-in}.cw{display:flex;flex-wrap:wrap;gap:10px}.cc{flex:1 1 190px;max-width:270px;background:var(--card);border:1px solid var(--ln);border-radius:20px 8px 20px 10px;padding:10px;display:flex;flex-direction:column;gap:4px}.cc .a{display:flex;gap:4px;margin-top:auto;padding-top:6px}.th.big{width:100%;height:90px}
+:root{--bg:#f5f6f7;--card:#fff;--ink:#202124;--tq:#c62828;--vi:#c62828;--tan:#d7dbe0;--mut:#687078;--ln:#e1e4e8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#f5f6f7;--card:#fff;--ink:#202124;--tq:#c62828;--vi:#c62828;--tan:#d7dbe0;--mut:#687078;--ln:#e1e4e8}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 Inter,Arial,sans-serif;background-image:none}
+h1,h2,h3{font-family:Inter,Arial,sans-serif;font-weight:650;letter-spacing:-.02em}
+header.top h1{font-size:26px;letter-spacing:-.04em}header.top span{font-style:normal;color:var(--mut)}
+nav button{border:1px solid var(--ln);background:#fff;color:var(--ink);border-radius:8px;font:600 13px Inter,Arial,sans-serif}
+nav button.on{background:#c62828;color:#fff;border-color:#c62828}
+.card{background:#fff;border:1px solid var(--ln);border-radius:12px;box-shadow:0 2px 10px #1111}
+input,select,textarea{background:#fff;border:1px solid #d7dbe0;border-radius:7px}
+.btn{background:#c62828;border-radius:7px;font:600 13px Inter,Arial,sans-serif}
+.btn.vi{background:#555b62}.btn.bk{background:#202124;color:#fff}.btn.gh{background:#fff;color:#444;border:1px solid #d7dbe0}
+.sm{border:1px solid #d7dbe0;background:#fff;border-radius:6px}
+.blk{border:1px solid #e1e4e8;border-radius:9px;background:#fafafa}.blk.on{border-color:#c62828;background:#c6282808}
+.blk header input{font-family:Inter,Arial,sans-serif}
+.it,.pk{background:#fff;border:1px solid #e6e8eb;border-radius:8px}
+.tag{background:#e9ecef;color:#4b5158;border-radius:5px}.tag.Principiante,.tag.Intermedio,.tag.Avanzado{background:#eef0f2;color:#444}
+.chip{border:1px solid #dfe2e6;background:#fff;border-radius:7px;font:600 12px Inter,Arial,sans-serif}.chip.on{background:#c62828;color:#fff;border-color:#c62828}
+.ec{border:1px solid #e1e4e8;border-radius:10px;background:#fff}.ec .im{background:#f0f1f3}
+.grp{color:#c62828;font:650 16px Inter,Arial,sans-serif}.paper{background:#fff;border:1px solid #ddd;border-radius:8px}.gside{background:#fff}
+#toast{background:#24272b;border-radius:8px}.cc{background:#fff;border:1px solid #e1e4e8;border-radius:9px}
+</style><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head><body>
+<header class="top"><h1>Entrenamiento</h1><span>planificá tus planillas</span></header>
+<nav id="nav"></nav>
+<main>
+<section id="t-b"><div class="card" style="max-width:780px;margin:auto"><h2>Armar planilla</h2>
+ <div class="row" style="margin:10px 0"><input id="cn" placeholder="Nombre de la clase" oninput="cur.name=this.value" style="flex:1 1 180px">
+  <input type="date" id="cd" onchange="cur.date=this.value"><select id="ct" onchange="cur.turno=this.value"><option>Mañana</option><option>Tarde</option><option>Noche</option></select><input type="time" id="ch" onchange="cur.hora=this.value"><select id="studentSel" onchange="cur.studentId=this.value"><option value="">Sin alumno asignado</option></select><select id="tp" onchange="cur.tpl=this.value;rB()"><option value="clasica">Plantilla: Clásica</option><option value="circuitos">Plantilla: Circuitos</option></select></div>
+ <div id="blks"></div>
+ <div class="row" style="margin-top:12px"><button class="btn gh" onclick="addB()">＋ Bloque</button><button class="btn" onclick="saveC()">Guardar</button><button class="btn vi" onclick="pdf(cur)">Descargar PDF</button><button class="btn gh" onclick="newClass()">Nueva</button></div></div></section>
+<section id="t-l" hidden><div class="card"><div class="row" style="justify-content:space-between"><h2>Biblioteca de clases</h2><button class="btn" onclick="studentModal()">＋ Crear alumno</button></div>
+ <div class="row" style="margin-top:10px"><span class="sp">Agrupar por</span><select id="gb" onchange="rL(1)"><option value="student">Alumno</option><option value="turno">Turno</option><option value="hora">Horario</option><option value="mes">Mes</option><option value="all">Sin agrupar</option></select><select id="studentFilter" onchange="rL(1)"><option value="">Todos los alumnos</option></select><input id="ls" placeholder="Buscar planilla…" oninput="rL(1)"></div><div id="ll"></div><div class="row pg" id="pg"></div></div></section>
+<section id="t-e" hidden><div class="card"><div class="row"><h2 style="flex:1">Biblioteca de ejercicios</h2><select id="fl" onchange="rE()"></select></div><div class="chips" id="fa"></div></div>
+ <div class="eg" id="eg" style="margin-top:14px"></div></section>
+<section id="t-c" hidden><div class="card" style="max-width:640px;margin:auto"><h2>Crear ejercicio</h2>
+ <div class="row" style="margin:12px 0"><input id="xn" placeholder="Nombre" style="flex:1 1 180px"><select id="xa" onchange="spv()"></select><select id="xl"><option>Principiante</option><option>Intermedio</option><option>Avanzado</option></select></div>
+ <textarea id="xd" placeholder="Descripción: posición, ejecución, respiración…"></textarea>
+ <div class="row spx" id="xs" style="margin-top:8px"></div>
+ <div id="dzc"></div><button class="btn" onclick="addEx()">Crear ejercicio</button></div></section>
+<div id="modal" class="mo" hidden><div class="card" id="mdl"></div></div>
+</main>
+<div id="print"></div><div id="toast"></div>
 <script>
-const TIPOS=['Fuerza','Resistencia','Velocidad','Equilibrio','Coordinación','Flexibilidad','Movilidad'];
-const BL={calentamiento:'Entrada en calor',central:'Parte central',enfriamiento:'Enfriamiento'};
-let db=load();
-let vista='planillas', cur=null, bloque='calentamiento', tipo='Fuerza', alumnoSel=null;
-function load(){try{return JSON.parse(localStorage.getItem('rutDB'))||{alumnos:[],sesiones:[]}}catch(e){return{alumnos:[],sesiones:[]}}}
-function save(){try{localStorage.setItem('rutDB',JSON.stringify(db));return true}catch(e){alert('Memoria llena. Elimina planillas o imágenes antiguas.');return false}}
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const $=id=>document.getElementById(id);
-const ses=id=>db.sesiones.find(s=>s.id===id);
-const alu=id=>db.alumnos.find(a=>a.id===id);
-function nueva(){return{id:uid(),nombre:'',alumnoId:'',sujeto:{nombre:'',edad:'',info:''},fecha:new Date().toISOString().slice(0,10),objetivo:'',ej:[]}}
-function go(v,arg){
-  if(v==='editor'){cur=arg?JSON.parse(JSON.stringify(arg)):nueva();bloque='calentamiento';tipo='Fuerza';}
-  if(v==='alumno'){alumnoSel=arg;}
-  vista=v;render();window.scrollTo(0,0);
-}
-function render(){
-  $('n1').className=(vista==='planillas'||vista==='editor')?'on':'';
-  $('n2').className=(vista==='alumnos'||vista==='alumno')?'on':'';
-  if(vista==='planillas')renderPlanillas();
-  else if(vista==='editor')renderEditor();
-  else if(vista==='alumnos')renderAlumnos();
-  else if(vista==='alumno')renderAlumno();
-}
-/* ---------- PLANILLAS ---------- */
-function renderPlanillas(){
-  const lista=[...db.sesiones].sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
-  $('app').innerHTML=`
-    <div class="row" style="margin-bottom:12px"><button class="primary" onclick="go('editor')">+ Nueva clase</button></div>
-    ${lista.length?lista.map(s=>`
-      <div class="card" onclick="go('editor',ses('${s.id}'))">
-        <div class="row" style="align-items:center">
-          <div><b>${esc(s.nombre)||'Sin nombre'}</b><div class="muted">${esc(s.sujeto.nombre)||'Sin sujeto'} · ${esc(s.fecha)}</div>
-          <div class="muted">${s.ej.length} ejercicio(s)</div></div>
-          <button class="danger" style="flex:none" onclick="event.stopPropagation();borrarSesion('${s.id}')">🗑</button>
-        </div>
-      </div>`).join(''):'<p class="muted">Todavía no tienes planillas. Crea la primera con "+ Nueva clase".</p>'}`;
-}
-function borrarSesion(id){
-  if(!confirm('¿Eliminar esta planilla?'))return;
-  db.sesiones=db.sesiones.filter(s=>s.id!==id);save();render();
-}
-/* ---------- EDITOR DE CLASE ---------- */
-function renderEditor(){
-  const lista=cur.ej.filter(e=>e.bloque===bloque&&e.tipo===tipo);
-  $('app').innerHTML=`
-    <div class="row"><button class="ghost" style="flex:none" onclick="go('planillas')">← Volver</button></div>
-    <h2 style="margin-top:12px">Planilla de clase</h2>
-    <label>Nombre de la planilla</label>
-    <input value="${esc(cur.nombre)}" oninput="cur.nombre=this.value">
-    <label>Alumno registrado</label>
-    <select onchange="asignarAlumno(this.value)">
-      <option value="">— Manual —</option>
-      ${db.alumnos.map(a=>`<option value="${a.id}" ${a.id===cur.alumnoId?'selected':''}>${esc(a.nombre)}</option>`).join('')}
-    </select>
-    <div class="row">
-      <div><label>Sujeto</label><input value="${esc(cur.sujeto.nombre)}" oninput="cur.sujeto.nombre=this.value"></div>
-      <div style="flex:.5"><label>Edad</label><input value="${esc(cur.sujeto.edad)}" oninput="cur.sujeto.edad=this.value"></div>
-    </div>
-    <label>Datos adicionales</label>
-    <input value="${esc(cur.sujeto.info)}" oninput="cur.sujeto.info=this.value">
-    <label>Fecha</label>
-    <input type="date" value="${esc(cur.fecha)}" oninput="cur.fecha=this.value">
-    <label>Objetivo de la sesión</label>
-    <textarea oninput="cur.objetivo=this.value">${esc(cur.objetivo)}</textarea>
-    <div class="seg">${Object.entries(BL).map(([k,v])=>`<button class="${k===bloque?'on':''}" onclick="bloque='${k}';renderEditor()">${v}</button>`).join('')}</div>
-    <div class="chips">${TIPOS.map(t=>`<button class="${t===tipo?'on':''}" onclick="tipo='${t}';renderEditor()">${t}</button>`).join('')}</div>
-    ${lista.length?lista.map(ejHTML).join(''):'<p class="muted" style="margin:8px 0">Sin ejercicios en esta sección.</p>'}
-    <button class="ghost btnfull" onclick="modalEj()">+ Agregar ejercicio</button>
-    <div class="row" style="margin-top:18px">
-      <button class="ghost" onclick="guardarClase(true)">💾 Guardar clase</button>
-      <button class="primary" onclick="pdf()">📄 Guardar PDF</button>
-    </div>`;
-}
-function ejHTML(e){
-  return `<div class="ej">
-    <div class="thumb">${e.img?`<img src="${e.img}">`:'Sin imagen'}</div>
-    <div class="info">
-      <b>${esc(e.nombre)}</b><br>
-      <span class="dos">${esc(e.series)||'-'} series × ${esc(e.reps)||'-'} reps</span>
-      <div class="muted">${esc(e.desc)}</div>
-      <div class="acts">
-        <button class="order-btn" title="Subir ejercicio" aria-label="Subir ejercicio"
-          onclick="moverEj('${e.id}',-1)" ${!puedeMover(e.id,-1)?'disabled':''}>↑</button>
-        <button class="order-btn" title="Bajar ejercicio" aria-label="Bajar ejercicio"
-          onclick="moverEj('${e.id}',1)" ${!puedeMover(e.id,1)?'disabled':''}>↓</button>
-        <button class="ghost" onclick="modalEj('${e.id}')">Editar</button>
-        <button class="danger" onclick="borrarEj('${e.id}')">Eliminar</button>
-      </div>
-    </div>
-  </div>`;
-}
-function asignarAlumno(id){
-  cur.alumnoId=id;
-  const a=alu(id);
-  if(a)cur.sujeto={nombre:a.nombre,edad:a.edad,info:a.objetivo||''};
-  renderEditor();
-}
-function indicesGrupoEj(id){
-  const actual=cur.ej.find(e=>e.id===id);
-  if(!actual)return [];
-  return cur.ej.map((e,i)=>({e,i}))
-    .filter(x=>x.e.bloque===actual.bloque&&x.e.tipo===actual.tipo)
-    .map(x=>x.i);
-}
-function puedeMover(id,delta){
-  const indices=indicesGrupoEj(id);
-  const posicion=indices.indexOf(cur.ej.findIndex(e=>e.id===id));
-  return posicion>=0&&posicion+delta>=0&&posicion+delta<indices.length;
-}
-function moverEj(id,delta){
-  const indices=indicesGrupoEj(id);
-  const indice=cur.ej.findIndex(e=>e.id===id);
-  const posicion=indices.indexOf(indice);
-  const destino=indices[posicion+delta];
-  if(posicion<0||destino===undefined)return;
-  [cur.ej[indice],cur.ej[destino]]=[cur.ej[destino],cur.ej[indice]];
-  renderEditor();
-}
-function borrarEj(id){cur.ej=cur.ej.filter(e=>e.id!==id);renderEditor();}
-function guardarClase(mostrar){
-  if(!cur.nombre.trim())cur.nombre='Clase '+cur.fecha;
-  const i=db.sesiones.findIndex(s=>s.id===cur.id);
-  if(i>=0)db.sesiones[i]=cur;else db.sesiones.push(cur);
-  const ok=save();
-  if(ok&&mostrar)alert('Clase guardada ✔');
-  return ok;
-}
-/* ---------- MODAL EJERCICIO ---------- */
-function modalEj(id){
-  const e=id?cur.ej.find(x=>x.id===id):{id:uid(),nombre:'',series:'',reps:'',desc:'',img:'',tipo,bloque};
-  let imgTemp=e.img||'';
-  openModal(`
-    <h2>${id?'Editar':'Nuevo'} ejercicio</h2>
-    <label>Nombre</label>
-    <input id="m_n" value="${esc(e.nombre)}">
-    <div class="row">
-      <div><label>Tipo</label><select id="m_t">${TIPOS.map(t=>`<option ${t===e.tipo?'selected':''}>${t}</option>`).join('')}</select></div>
-      <div><label>Bloque</label><select id="m_b">${Object.entries(BL).map(([k,v])=>`<option value="${k}" ${k===e.bloque?'selected':''}>${v}</option>`).join('')}</select></div>
-    </div>
-    <div class="row">
-      <div><label>Series</label><input id="m_s" value="${esc(e.series)}" inputmode="numeric"></div>
-      <div><label>Repeticiones</label><input id="m_r" value="${esc(e.reps)}"></div>
-    </div>
-    <label>Descripción de la intención</label>
-    <textarea id="m_d">${esc(e.desc)}</textarea>
-    <label>Imagen (opcional, se comprime sola)</label>
-    <input type="file" accept="image/*" id="m_i">
-    <div class="acts"><button class="danger" id="m_x">Quitar imagen</button></div>
-    <div class="row" style="margin-top:14px">
-      <button class="ghost" onclick="closeModal()">Cancelar</button>
-      <button class="primary" id="m_ok">Guardar</button>
-    </div>`);
-  $('m_i').onchange=async ev=>{const f=ev.target.files[0];if(f)imgTemp=await comprimir(f);};
-  $('m_x').onclick=()=>{imgTemp='';alert('Imagen quitada. Pulsa Guardar para confirmar.');};
-  $('m_ok').onclick=()=>{
-    const n=$('m_n').value.trim();
-    if(!n){alert('Escribe un nombre para el ejercicio');return;}
-    const nuevo={...e,nombre:n,tipo:$('m_t').value,bloque:$('m_b').value,series:$('m_s').value,reps:$('m_r').value,desc:$('m_d').value,img:imgTemp};
-    const i=cur.ej.findIndex(x=>x.id===e.id);
-    if(i>=0)cur.ej[i]=nuevo;else cur.ej.push(nuevo);
-    tipo=nuevo.tipo;bloque=nuevo.bloque;
-    closeModal();renderEditor();
-  };
-}
-function comprimir(file){
-  return new Promise(res=>{
-    const r=new FileReader();
-    r.onload=()=>{
-      const im=new Image();
-      im.onload=()=>{
-        const max=400,k=Math.min(1,max/Math.max(im.width,im.height));
-        const c=document.createElement('canvas');
-        c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
-        c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-        res(c.toDataURL('image/jpeg',0.6));
-      };
-      im.onerror=()=>res('');
-      im.src=r.result;
-    };
-    r.readAsDataURL(file);
-  });
-}
-function openModal(h){
-  closeModal();
-  const d=document.createElement('div');
-  d.className='modal';d.id='mod';
-  d.innerHTML=`<div class="sheet">${h}</div>`;
-  d.onclick=e=>{if(e.target===d)closeModal();};
-  document.body.appendChild(d);
-}
-function closeModal(){const m=$('mod');if(m)m.remove();}
-/* ---------- PDF ---------- */
-function pdf(){
-  guardarClase(false);
-  $('printArea').innerHTML=`
-    <h1>${esc(cur.nombre)}</h1>
-    <p><b>Sujeto:</b> ${esc(cur.sujeto.nombre)} ${cur.sujeto.edad?'· '+esc(cur.sujeto.edad)+' años':''} ${esc(cur.sujeto.info)}</p>
-    <p><b>Fecha:</b> ${esc(cur.fecha)}</p>
-    <p><b>Objetivo:</b> ${esc(cur.objetivo)}</p>
-    ${Object.entries(BL).map(([k,v])=>`
-      <h2>${v}</h2>
-      ${TIPOS.map(t=>{
-        const l=cur.ej.filter(e=>e.bloque===k&&e.tipo===t);
-        return l.length?`<h3>${t}</h3>`+l.map(e=>`
-          <div class="pb">
-            ${e.img?`<img src="${e.img}">`:''}
-            <div><b>${esc(e.nombre)}</b> — ${esc(e.series)} series × ${esc(e.reps)} reps<br>${esc(e.desc)}</div>
-          </div>`).join(''):'';
-      }).join('')}`).join('')}`;
-  window.print();
-}
-/* ---------- ALUMNOS ---------- */
-function renderAlumnos(){
-  const lista=[...db.alumnos].sort((a,b)=>a.nombre.localeCompare(b.nombre));
-  $('app').innerHTML=`
-    <div class="row" style="margin-bottom:12px"><button class="primary" onclick="modalAlumno()">+ Nuevo alumno</button></div>
-    ${lista.length?lista.map(a=>`
-      <div class="card" onclick="go('alumno','${a.id}')">
-        <b>${esc(a.nombre)}</b>
-        <div class="muted">${esc(a.edad)?esc(a.edad)+' años · ':''}${db.sesiones.filter(s=>s.alumnoId===a.id).length} sesión(es) registrada(s)</div>
-      </div>`).join(''):'<p class="muted">No hay alumnos registrados.</p>'}`;
-}
-function modalAlumno(id){
-  const a=id?alu(id):{id:uid(),nombre:'',edad:'',contacto:'',objetivo:'',notas:''};
-  openModal(`
-    <h2>${id?'Editar':'Nuevo'} alumno</h2>
-    <label>Nombre</label><input id="a_n" value="${esc(a.nombre)}">
-    <div class="row">
-      <div><label>Edad</label><input id="a_e" value="${esc(a.edad)}" inputmode="numeric"></div>
-      <div><label>Contacto</label><input id="a_c" value="${esc(a.contacto)}"></div>
-    </div>
-    <label>Objetivo general</label><input id="a_o" value="${esc(a.objetivo)}">
-    <label>Notas</label><textarea id="a_notas">${esc(a.notas)}</textarea>
-    <div class="row" style="margin-top:14px">
-      <button class="ghost" onclick="closeModal()">Cancelar</button>
-      <button class="primary" id="a_ok">Guardar</button>
-    </div>`);
-  $('a_ok').onclick=()=>{
-    const n=$('a_n').value.trim();
-    if(!n){alert('Escribe el nombre del alumno');return;}
-    const nuevo={...a,nombre:n,edad:$('a_e').value,contacto:$('a_c').value,objetivo:$('a_o').value,notas:$('a_notas').value};
-    const i=db.alumnos.findIndex(x=>x.id===a.id);
-    if(i>=0)db.alumnos[i]=nuevo;else db.alumnos.push(nuevo);
-    save();closeModal();render();
-  };
-}
-function borrarAlumno(id){
-  if(!confirm('¿Eliminar al alumno? Sus planillas se conservarán sin asignar.'))return;
-  db.alumnos=db.alumnos.filter(a=>a.id!==id);
-  db.sesiones.forEach(s=>{if(s.alumnoId===id)s.alumnoId='';});
-  save();go('alumnos');
-}
-function nuevaParaAlumno(id){
-  const a=alu(id), c=nueva();
-  c.alumnoId=id;
-  c.sujeto={nombre:a.nombre,edad:a.edad,info:a.objetivo||''};
-  go('editor',c);
-}
-function renderAlumno(){
-  const a=alu(alumnoSel);
-  if(!a){vista='alumnos';renderAlumnos();return;}
-  const sesiones=db.sesiones.filter(s=>s.alumnoId===a.id).sort((x,y)=>(y.fecha||'').localeCompare(x.fecha||''));
-  $('app').innerHTML=`
-    <div class="row"><button class="ghost" style="flex:none" onclick="go('alumnos')">← Volver</button></div>
-    <div class="card" style="margin-top:12px;cursor:default">
-      <h2>${esc(a.nombre)}</h2>
-      <div class="muted">Edad: ${esc(a.edad)||'-'} · Contacto: ${esc(a.contacto)||'-'}</div>
-      <p style="margin-top:8px"><b>Objetivo:</b> ${esc(a.objetivo)||'-'}</p>
-      ${a.notas?`<p class="muted" style="margin-top:4px">${esc(a.notas)}</p>`:''}
-      <div class="acts">
-        <button class="ghost" onclick="modalAlumno('${a.id}')">Editar datos</button>
-        <button class="danger" onclick="borrarAlumno('${a.id}')">Eliminar alumno</button>
-      </div>
-    </div>
-    <button class="primary btnfull" onclick="nuevaParaAlumno('${a.id}')">+ Nueva clase para este alumno</button>
-    <h2 style="margin-top:18px">Sesiones realizadas (${sesiones.length})</h2>
-    ${sesiones.length?sesiones.map(s=>`
-      <div class="card" onclick="go('editor',ses('${s.id}'))">
-        <b>${esc(s.nombre)}</b>
-        <div class="muted">${esc(s.fecha)} · ${s.ej.length} ejercicio(s)</div>
-        ${s.objetivo?`<div class="muted">Objetivo: ${esc(s.objetivo)}</div>`:''}
-      </div>`).join(''):'<p class="muted">Todavía no hay sesiones para este alumno.</p>'}`;
-}
-render();
-</script>
-</body>
-</html>
+const AP=['Fuerza','Velocidad','Resistencia','Equilibrio','Flexibilidad','Movilidad'],
+EM={Fuerza:'●',Velocidad:'↗',Resistencia:'◒',Equilibrio:'◇',Flexibilidad:'⌁',Movilidad:'↔'},
+SP={Fuerza:['#c62828',1],Velocidad:['#8f1d1d',1],Resistencia:['#666b72',1],Equilibrio:['#9b3030',1],Flexibilidad:['#92979e',1],Movilidad:['#4f555c',1]},
+SPAP=[],LV={P:'Principiante',I:'Intermedio',A:'Avanzado'};
+const SEED=`Sentadilla a silla|Fuerza|P
+Remo con banda|Fuerza|P
+Elevación de talones|Fuerza|P
+Marcha rápida en el lugar|Velocidad|P
+Desplazamientos cortos|Velocidad|I
+Caminata continua|Resistencia|P
+Circuito aeróbico suave|Resistencia|P
+Apoyo unipodal asistido|Equilibrio|P
+Transferencias de peso|Equilibrio|P
+Estiramiento de cadena posterior|Flexibilidad|P
+Movilidad de columna|Movilidad|P
+Círculos de hombros|Movilidad|P`.split('\n').map((r,i)=>{const[n,ap,l]=r.split('|');return{id:'s'+i,n,ap,lv:LV[l],sp:[],d:''}});
+let S={ex:[],cl:[],students:[]};try{S=Object.assign(S,JSON.parse(localStorage.getItem('entrenamiento1')||'{}'))}catch(e){} S.students=S.students||[];
+const sv=()=>{try{localStorage.setItem('entrenamiento1',JSON.stringify(S))}catch(e){toast('Sin espacio: usá imágenes más chicas')}};
+const ALL=()=>SEED.filter(e=>!(S.hid||[]).includes(e.id)).map(e=>({...e,...(S.ov||{})[e.id]})).concat(S.ex),$=i=>document.getElementById(i),G=id=>ALL().find(e=>e.id==id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast=m=>{const t=$('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200)};
+const dots=sp=>sp.length?`<span class="sp">${sp.map(s=>`<span class="tag" style="background:${SP[s]?.[0]||'#777'};color:#fff">${esc(s)}</span>`).join(' ')}</span>`:'';
+const newC=()=>({tpl:'clasica',id:null,name:'',studentId:'',date:new Date().toISOString().slice(0,10),turno:'Mañana',hora:'09:00',blocks:[{n:'Calentamiento',it:[]},{n:'Trabajo principal',it:[]},{n:'Cierre',it:[]}]});
+let cur=newC(),act=0,fa='Todos',tmpImg='';
+// tabs
+const TABS=[['b','Armar planilla'],['l','Biblioteca de clases'],['e','Ejercicios'],['c','Crear ejercicio']];
+function go(t){TABS.forEach(([k])=>{if($('t-'+k))$('t-'+k).hidden=k!=t});$('nav').innerHTML=TABS.map(([k,l])=>`<button class="${k==t?'on':''}" onclick="go('${k}')">${l}</button>`).join('');if(t=='b')rB();if(t=='l')rL(1);if(t=='e')rE();if(t=='c')dz('dzc')}
+const nz=c=>{c.tpl=c.tpl||'clasica';c.studentId=c.studentId||'';c.blocks.forEach(b=>b.it=b.it.map(x=>typeof x=='string'?{id:x}:x));return c};S.cl.forEach(nz);S.ov=S.ov||{};S.hid=S.hid||[];
+const M=h=>{$('mdl').innerHTML=h;$('modal').hidden=false},cm=()=>{$('modal').hidden=true;$('mdl').innerHTML='';$('mdl').style.maxWidth=''};
+const MES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const spx=(sel)=>Object.keys(SP).map(s=>`<label class="chip"><input type="checkbox" value="${s}" ${sel.includes(s)?'checked':''}> <i class="dt" style="background:${SP[s][0]}"></i>${s}</label>`).join('');
+const rd=()=>[...($('modal').hidden?document:$('mdl')).querySelectorAll('.spx input:checked')].map(i=>i.value);
+const load=sp=>sp.reduce((a,s)=>a+SP[s][1],0);
+// image helpers (compressed to 240px)
+function comp(f,cb){if(!f)return;const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=360/Math.max(i.width,i.height,360),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.7))};i.src=r.result};r.readAsDataURL(f)}
+const dz=(id,img)=>{$(id).innerHTML=`<div class="dz" ondragover="event.preventDefault()" ondrop="event.preventDefault();pick(event.dataTransfer.files[0],'${id}')" onclick="$('fi_${id}').click()">Arrastrá una imagen acá o tocá para elegir un archivo<br><span class="sp">se comprime automáticamente</span></div><input type="file" id="fi_${id}" hidden accept="image/*" onchange="pick(this.files[0],'${id}')"><div id="pv_${id}">${img?`<img class="th" src="${img}">`:''}</div>`};
+const pick=(f,id)=>comp(f,u=>{tmpImg=u;$('pv_'+id).innerHTML=`<img class="th" src="${u}">`;toast('Imagen lista')});
+// builder
+function rB(){$('cn').value=cur.name;$('cd').value=cur.date;$('ct').value=cur.turno;$('ch').value=cur.hora;fillStudentSelect();$('studentSel').value=cur.studentId||'';$('tp').value=cur.tpl;
+ const cc=cur.tpl=='circuitos';$('t-b').firstElementChild.style.maxWidth=cc?'1100px':'780px';
+ $('blks').innerHTML=cur.blocks.map((b,bi)=>{const its=b.it.map((t,ii)=>{const e=G(t.id)||{n:'(eliminado)',sp:[]},d=t.d??e.d??'',sp=t.sp??e.sp,im=t.img&&e.img?`<img class="th${cc?' big':''}" src="${e.img}">`:'',nm=`<b>${ii+1}. ${esc(t.n||e.n)}</b>`,ds=d?`<span class="sp">${esc(d)}</span>`:'';
+  const bt=`<span class="a"><button class="sm" onclick="mv(${bi},${ii},-1)">${cc?'◀':'↑'}</button><button class="sm" onclick="mv(${bi},${ii},1)">${cc?'▶':'↓'}</button><button class="sm" title="Editar" onclick="ei(${bi},${ii})">✎</button><button class="sm" onclick="cur.blocks[${bi}].it.splice(${ii},1);rB()">✕</button></span>`;
+  return cc?`<div class="cc">${im}${nm}<div>${dots(sp)}</div>${ds}${bt}</div>`:`<div class="it"><span style="display:flex;gap:8px;align-items:center">${im}<span>${nm} ${dots(sp)}${d?'<br>'+ds:''}</span></span>${bt}</div>`}).join('');
+  return`<div class="blk"><header><input value="${esc(b.n)}" onchange="cur.blocks[${bi}].n=this.value"><button class="sm" onclick="delB(${bi})" title="Quitar bloque">✕</button></header>${cc?`<div class="cw">${its}</div>`:its}<button class="btn gh" style="padding:5px 14px;margin-top:6px" onclick="openPick(${bi})">＋ Ejercicio</button></div>`}).join('')}
+const addB=()=>{cur.blocks.push({n:'Nuevo bloque',it:[]});rB()};
+const ask=(m,fn)=>{window._cf=fn;M(`<p>${m}</p><div class="row"><button class="btn bk" onclick="cm();_cf()">Sí, eliminar</button><button class="btn gh" onclick="cm()">Cancelar</button></div>`)};
+const delB=i=>{const f=()=>{cur.blocks.splice(i,1);rB()};cur.blocks[i].it.length?ask('El bloque tiene ejercicios. ¿Quitarlo?',f):f()};
+function mv(b,i,d){const a=cur.blocks[b].it,j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];rB()}
+let pb=0,eb=0,ek=0;
+function openPick(bi){pb=bi;M(`<h2>Agregar a «${esc(cur.blocks[bi].n)}»</h2><div class="row" style="margin:10px 0"><input id="ps" placeholder="Buscar…" oninput="rP()" style="flex:1"><select id="pa" onchange="rP()">${['Todos',...AP].map(a=>`<option>${a}</option>`).join('')}</select></div><button class="btn vi" style="margin-bottom:8px" onclick="openNew()">＋ Crear ejercicio nuevo</button><div id="pl" style="max-height:44vh;overflow:auto"></div><button class="btn" style="margin-top:10px" onclick="cm()">Listo</button>`);rP()}
+function openNew(){tmpImg='';M(`<h2>Nuevo ejercicio para «${esc(cur.blocks[pb].n)}»</h2><div class="row" style="margin:10px 0"><input id="qn" placeholder="Nombre" style="flex:1 1 160px"><select id="qa">${AP.map(a=>`<option>${a}</option>`).join('')}</select><select id="ql"><option>Principiante</option><option>Intermedio</option><option>Avanzado</option></select></div><textarea id="qd" placeholder="Descripción"></textarea><div id="dzq"></div><div class="row" style="margin-top:10px"><button class="btn" onclick="addQ()">Crear y agregar</button><button class="btn gh" onclick="openPick(pb)">Volver</button></div>`);dz('dzq')}
+const qsp=()=>$('qs').innerHTML='';
+function addQ(){const n=$('qn').value.trim();if(!n)return toast('Falta el nombre');const id='x'+Date.now();S.ex.push({id,n,ap:$('qa').value,lv:$('ql').value,d:$('qd').value,sp:[],img:tmpImg||'',custom:1});tmpImg='';cur.blocks[pb].it.push({id});sv();cm();rB();toast('Creado y agregado ✓')}
+function rP(){const q=$('ps').value.toLowerCase(),a=$('pa').value;$('pl').innerHTML=ALL().filter(e=>(a=='Todos'||e.ap==a)&&e.n.toLowerCase().includes(q)).map(e=>`<div class="pk"><span>${EM[e.ap]||'•'} ${esc(e.n)}<span class="tag ${e.lv}">${e.lv.slice(0,4)}.</span></span><button class="sm" onclick="cur.blocks[pb].it.push({id:'${e.id}'});rB();toast('Agregado ✓')">＋</button></div>`).join('')||'<div class="empty">Sin resultados</div>'}
+function ei(bi,ii){eb=bi;ek=ii;const t=cur.blocks[bi].it[ii],e=G(t.id);M(`<input id="mn" value="${esc(t.n||e.n)}" style="width:100%;font:600 20px Fraunces,Georgia,serif;margin-bottom:6px"><p class="sp">Título y ajustes solo para esta clase</p><textarea id="md" placeholder="Descripción / indicaciones">${esc(t.d??e.d??'')}</textarea><p class="sp" style="margin:8px 0 4px">Categoría: ${esc(e.ap)}</p>${e.img?`<label class="chip" style="display:inline-block;margin-top:10px"><input type="checkbox" id="mi" ${t.img?'checked':''}> Mostrar imagen <img class="th" style="width:28px;height:28px;vertical-align:middle" src="${e.img}"></label>`:'<p class="sp">Este ejercicio no tiene imagen (podés cargarla en Ejercicios).</p>'}<div class="row" style="margin-top:12px"><button class="btn" onclick="si()">Aplicar</button><button class="btn gh" onclick="cm()">Cancelar</button></div>`)}
+function si(){const t=cur.blocks[eb].it[ek],e=G(t.id),nn=$('mn').value.trim();t.n=nn&&nn!=e.n?nn:undefined;t.d=$('md').value;t.img=$('mi')?$('mi').checked:false;cm();rB()}
+function saveC(){if(!cur.name.trim())return toast('Ponele un nombre a la planilla');
+ if(cur.id){const i=S.cl.findIndex(c=>c.id==cur.id);S.cl[i]=JSON.parse(JSON.stringify(cur))}else{cur.id='c'+Date.now();S.cl.push(JSON.parse(JSON.stringify(cur)))}sv();toast('Planilla guardada ✓')}
+const newClass=()=>{cur=newC();rB()};
+function pdfPrint(c){$('print').innerHTML=`<h1>${esc(c.name||'Planilla de entrenamiento')}</h1><p>${esc(studentName(c.studentId))} · ${esc(c.date)} · ${esc(c.turno)} · ${esc(c.hora)}</p>`+c.blocks.map(b=>`<div class="pb"><h2>${esc(b.n)}</h2><ol ${c.tpl=='circuitos'?'style="display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0"':''}>${b.it.map(t=>{const e=G(t.id);if(!e)return'';const sp=t.sp??e.sp,d=t.d??e.d;return`<li ${c.tpl=='circuitos'?'style="width:23%;border:1px solid #ccc;border-radius:8px;padding:6px"':''}>${t.img&&e.img?`<img src="${e.img}">`:''}<b>${esc(t.n||e.n)}</b> · ${e.ap} · ${e.lv}${sp.length?' · '+sp.join(' + '):''}${d?`<br><i>${esc(d)}</i>`:''}</li>`}).join('')||'<li>—</li>'}</ol></div>`).join('');
+ toast('En el diálogo elegí «Guardar como PDF»');setTimeout(()=>window.print(),300)}
+let pc=null;
+function pvh(c){const cc=c.tpl=='circuitos';return`<h3 style="font-size:22px;color:var(--tq)">${esc(c.name||'Planilla de entrenamiento')}</h3><p class="sp">${esc(studentName(c.studentId))} · ${esc(c.date)} · ${esc(c.turno)} · ${esc(c.hora)} · ${cc?'Circuitos':'Clásica'}</p>`+c.blocks.map(b=>{const its=b.it.map((t,i)=>{const e=G(t.id);if(!e)return'';const sp=t.sp??e.sp,d=t.d??e.d??'',im=t.img&&e.img?`<img class="th${cc?' big':''}" src="${e.img}">`:'',nm=`<b>${i+1}. ${esc(t.n||e.n)}</b>`,ds=d?`<span class="sp">${esc(d)}</span>`:'';return cc?`<div class="cc">${im}${nm}<div>${dots(sp)}</div>${ds}</div>`:`<div class="it"><span style="display:flex;gap:8px;align-items:center">${im}<span>${nm} ${dots(sp)}${d?'<br>'+ds:''}</span></span></div>`}).join('');return`<div class="blk"><h3 style="margin-bottom:6px;color:var(--vi)">${esc(b.n)}</h3>${cc?`<div class="cw">${its}</div>`:its}</div>`}).join('')}
+function pdf(c){pc=c;M(`<h2>Vista previa del PDF</h2><div class="paper" style="margin-top:10px">${pvh(c)}</div><div class="row" style="margin-top:12px"><button class="btn vi" onclick="dlPdf(pc)">Descargar PDF</button><button class="btn gh" onclick="cm()">Cerrar</button></div>`);$('mdl').style.maxWidth=c.tpl=='circuitos'?'1000px':''}
+async function dlPdf(c){let dw=null;try{dw=await window.claude.use('downloads')}catch(e){}
+ if(!window.jspdf){cm();return pdfPrint(c)}
+ const L=c.tpl=='circuitos',d=new jspdf.jsPDF({unit:'mm',format:'a4',orientation:L?'l':'p'}),W=L?297:210,PH=L?210:297,X=16;let y=22;
+ const bg=()=>{d.setFillColor(242,233,216);d.rect(0,0,W,PH,'F')},nl=h=>{if(y+h>PH-13){d.addPage();bg();y=18}};
+ bg();d.setFont('times','bold');d.setFontSize(22);d.setTextColor(28,154,152);d.text(c.name||'Planilla de entrenamiento',X,y);y+=7;
+ d.setFont('helvetica','normal');d.setFontSize(10);d.setTextColor(122,109,90);d.text(`${studentName(c.studentId)} · ${c.date} · ${c.turno} · ${c.hora}`,X,y);y+=9;
+ const circ=b=>{const cw=(W-2*X-12)/4;for(let k=0;k<b.it.length;k+=4){const row=b.it.slice(k,k+4).map((t,j)=>{const e=G(t.id);if(!e)return null;const sp=t.sp??e.sp,ds=t.d??e.d??'',im=t.img&&e.img;d.setFont('helvetica','bold');d.setFontSize(10.5);const tl=d.splitTextToSize(`${k+j+1}. ${t.n||e.n}`,cw-6);d.setFont('helvetica','normal');d.setFontSize(8.5);const dl=d.splitTextToSize(ds,cw-6);let rows=sp.length?1:0,acc=0;sp.forEach(s=>{const v=8+d.getTextWidth(s);if(acc+v>cw-6&&acc>0){rows++;acc=0}acc+=v});return{t,e,sp,im,tl,dl,rows,h:6+(im?19:0)+tl.length*4.5+4.5+rows*4.5+dl.length*3.8}}).filter(Boolean);if(!row.length)continue;const H=Math.max(...row.map(o=>o.h));nl(H+3);
+  row.forEach((o,j)=>{const x=X+j*(cw+4);d.setFillColor(251,246,234);d.setDrawColor(220,205,176);d.roundedRect(x,y,cw,H,3,3,'FD');let yy=y+3;if(o.im){try{d.addImage(o.e.img,'JPEG',x+3,yy,16,16)}catch(_){}yy+=19}
+   d.setFont('helvetica','bold');d.setFontSize(10.5);d.setTextColor(29,27,26);d.text(o.tl,x+3,yy+3.5);yy+=o.tl.length*4.5;
+   d.setFont('helvetica','normal');d.setFontSize(8.5);d.setTextColor(122,109,90);d.text(`${o.e.ap} · ${o.e.lv}`,x+3,yy+3);yy+=4.5;
+   let cx=x+3,ry=yy+3;d.setDrawColor(120);o.sp.forEach(s=>{const v=8+d.getTextWidth(s);if(cx-(x+3)+v>cw-6&&cx>x+3){cx=x+3;ry+=4.5}const k2=SP[s][0];d.setFillColor(parseInt(k2.slice(1,3),16),parseInt(k2.slice(3,5),16),parseInt(k2.slice(5,7),16));d.circle(cx+1.5,ry-.8,1.5,'FD');d.text(s,cx+4,ry);cx+=v});yy+=o.rows*4.5;
+   d.setTextColor(60,55,50);d.text(o.dl,x+3,yy+3)});y+=H+4}};
+ c.blocks.forEach(b=>{nl(30);d.setFillColor(107,74,160);d.roundedRect(X,y,W-2*X,9,4,4,'F');d.setFont('times','bold');d.setFontSize(13);d.setTextColor(255,255,255);d.text(b.n,X+5,y+6.2);y+=13;
+  if(L)circ(b);else b.it.forEach((t,i)=>{const e=G(t.id);if(!e)return;const sp=t.sp??e.sp,ds=t.d??e.d??'',im=t.img&&e.img,x=X+4+(im?16:0),ls=d.splitTextToSize(ds,W-X-x-4),h=Math.max(im?19:0,10+4.5+(sp.length?5:0)+ls.length*4+3);nl(h+2);
+   d.setFillColor(251,246,234);d.setDrawColor(220,205,176);d.roundedRect(X,y,W-2*X,h,3,3,'FD');
+   if(im)try{d.addImage(e.img,'JPEG',X+3,y+3,13,13)}catch(_){}
+   d.setFont('helvetica','bold');d.setFontSize(11);d.setTextColor(29,27,26);d.text(`${i+1}. ${t.n||e.n}`,x,y+6);
+   d.setFont('helvetica','normal');d.setFontSize(8.5);d.setTextColor(122,109,90);d.text(`${e.ap} · ${e.lv}`,x,y+10.5);
+   let cx=x;if(sp.length){d.setDrawColor(120);sp.forEach(s=>{const k=SP[s][0];d.setFillColor(parseInt(k.slice(1,3),16),parseInt(k.slice(3,5),16),parseInt(k.slice(5,7),16));d.circle(cx+1.5,y+14.3,1.5,'FD');d.text(s,cx+4,y+15.2);cx+=4+d.getTextWidth(s)+4})}
+   d.setTextColor(60,55,50);d.text(ls,x,y+(sp.length?20:15.5));y+=h+3});y+=4});
+ const fn=((c.name||'clase').replace(/[^\w\- áéíóúñ]/gi,'')||'clase')+'.pdf';try{if(dw)await dw.save({filename:fn,data:d.output('arraybuffer')});else d.save(fn);toast('PDF listo ✓')}catch(e){if(e.code!='declined')toast('No se pudo descargar el PDF')}}
+// Gestión de alumnos y asociación de planillas
+function fillStudentSelect(){const selectedStudent=$('studentSel')?.value||cur.studentId||'',selectedFilter=$('studentFilter')?.value||'';const list=S.students.slice().sort((a,b)=>a.name.localeCompare(b.name));const opts='<option value="">Sin alumno asignado</option>'+list.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');if($('studentSel')){$('studentSel').innerHTML=opts;$('studentSel').value=selectedStudent}if($('studentFilter')){$('studentFilter').innerHTML='<option value="">Todos los alumnos</option>'+list.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');$('studentFilter').value=selectedFilter}}
+const studentName=id=>S.students.find(a=>a.id===id)?.name||'Sin alumno asignado';
+function studentModal(id=''){const a=S.students.find(x=>x.id===id);M(`<h2>${a?'Editar alumno':'Crear alumno'}</h2><div class="row" style="margin:12px 0"><input id="stname" placeholder="Nombre y apellido" value="${esc(a?.name||'')}" style="flex:1 1 220px"><input id="stage" type="number" min="1" max="120" placeholder="Edad" value="${esc(a?.age||'')}" style="width:100px"></div><textarea id="stnote" placeholder="Observaciones (opcional)">${esc(a?.notes||'')}</textarea><div class="row" style="margin-top:12px"><button class="btn" onclick="saveStudent('${id}')">${a?'Guardar cambios':'Crear alumno'}</button><button class="btn gh" onclick="cm()">Cancelar</button></div>${a?`<button class="btn bk" style="margin-top:10px" onclick="deleteStudent('${id}')">Eliminar alumno</button>`:''}`)}
+function saveStudent(id){const name=$('stname').value.trim();if(!name)return toast('Ingresá el nombre del alumno');const data={name,age:$('stage').value,notes:$('stnote').value};if(id)Object.assign(S.students.find(x=>x.id===id),data);else S.students.push({id:'a'+Date.now(),...data});sv();cm();fillStudentSelect();if(!$('t-l').hidden)rL(1);toast('Alumno guardado ✓')}
+function deleteStudent(id){ask('¿Eliminar este alumno? Las planillas se conservarán sin alumno asignado.',()=>{S.students=S.students.filter(a=>a.id!==id);S.cl.forEach(c=>{if(c.studentId===id)c.studentId=''});if(cur.studentId===id)cur.studentId='';sv();cm();fillStudentSelect();rL(1);rB();toast('Alumno eliminado')})}
+// library (20 per page)
+let PG=1;
+function rL(r){if(r)PG=1;fillStudentSelect();const g=$('gb').value,q=$('ls').value.toLowerCase(),sf=$('studentFilter').value;
+ const all=S.cl.filter(c=>(c.name||'').toLowerCase().includes(q)&&(!sf||c.studentId===sf)).sort((a,b)=>(b.date||'').localeCompare(a.date||'')),np=Math.max(1,Math.ceil(all.length/20));PG=Math.min(PG,np);const m={};
+ all.slice((PG-1)*20,PG*20).forEach(c=>{const k=g==='student'?studentName(c.studentId):g==='turno'?c.turno:g==='hora'?c.hora:g==='mes'?(c.date?MES[+c.date.slice(5,7)-1]+' '+c.date.slice(0,4):'Sin fecha'):'Todas';(m[k]=m[k]||[]).push(c)});
+ $('ll').innerHTML=Object.keys(m).map(k=>`<div class="grp">${esc(k)}</div>`+m[k].map(c=>`<div class="it"><span><b>${esc(c.name)}</b> <span class="sp">${esc(studentName(c.studentId))} · ${esc(c.date)} · ${esc(c.turno)} ${esc(c.hora)} · ${c.blocks.reduce((n,b)=>n+b.it.length,0)} ejercicios</span></span><span class="a"><button class="sm" onclick="openC('${c.id}')">Abrir</button><button class="sm" onclick="dupC('${c.id}')">Duplicar</button><button class="sm" onclick="pdf(S.cl.find(x=>x.id=='${c.id}'))">PDF</button><button class="sm" onclick="delC('${c.id}')">✕</button></span></div>`).join('')).join('')||'<div class="empty">Todavía no guardaste planillas.</div>';
+ $('pg').innerHTML=np>1?`<button class="sm" ${PG<2?'disabled':''} onclick="PG--;rL()">‹</button>`+Array.from({length:np},(_,i)=>`<button class="chip ${i+1==PG?'on':''}" onclick="PG=${i+1};rL()">${i+1}</button>`).join('')+`<button class="sm" ${PG>=np?'disabled':''} onclick="PG++;rL()">›</button>`:''}
+const openC=id=>{cur=nz(JSON.parse(JSON.stringify(S.cl.find(c=>c.id==id))));go('b')};
+const dupC=id=>{const c=JSON.parse(JSON.stringify(S.cl.find(x=>x.id==id)));c.id='c'+Date.now();c.name+=' (copia)';S.cl.push(c);sv();rL()};
+const delC=id=>ask('¿Seguro que querés borrar esta clase?',()=>{S.cl=S.cl.filter(c=>c.id!=id);sv();rL()});
+// exercise library
+function rE(){const l=$('fl').value;
+ $('fa').innerHTML=['Todos',...AP].map(a=>`<button class="chip ${a==fa?'on':''}" onclick="fa='${a}';rE()">${a=='Todos'?'Todos':EM[a]+' '+a}</button>`).join('');
+ $('eg').innerHTML=ALL().filter(e=>(fa=='Todos'||e.ap==fa)&&(l=='Todos'||e.lv==l)).map(e=>`<div class="ec">${e.img?`<img class="im" loading="lazy" src="${e.img}">`:`<div class="im">${EM[e.ap]||'•'}</div>`}<div class="bd"><h3>${esc(e.n)}</h3><div class="sp">${e.ap}<span class="tag ${e.lv}">${e.lv}</span></div><p class="sp" style="margin:0 0 8px">${esc(e.d)||'Sin descripción'}</p><button class="sm" onclick="exE('${e.id}')">✎ Editar</button> </div></div>`).join('')}
+function exE(id){const e=G(id);tmpImg=undefined;M(`<h2>${esc(e.n)}</h2><div class="row" style="margin:8px 0"><select id="ecat">${AP.map(a=>`<option ${e.ap==a?'selected':''}>${a}</option>`).join('')}</select><select id="elv">${['Principiante','Intermedio','Avanzado'].map(a=>`<option ${e.lv==a?'selected':''}>${a}</option>`).join('')}</select></div><textarea id="md" placeholder="Descripción">${esc(e.d||'')}</textarea><div id="dzm"></div><div class="row" style="margin-top:12px"><button class="btn" onclick="sx('${id}')">Guardar</button><button class="btn gh" onclick="tmpImg='';$('pv_dzm').innerHTML='<span class=sp>Imagen quitada al guardar</span>'">Quitar imagen</button><button class="btn gh" onclick="cm()">Cancelar</button></div>`);dz('dzm',e.img);$('mdl').insertAdjacentHTML('beforeend',`<button class="btn bk" style="margin-top:10px" onclick="delEx('${id}')">🗑 Eliminar ejercicio</button>`)}
+function upd(id,p){const c=S.ex.find(e=>e.id==id);if(c)Object.assign(c,p);else S.ov[id]=Object.assign(S.ov[id]||{},p);sv()}
+function sx(id){const e=G(id),p={d:$('md').value,ap:$('ecat').value,lv:$('elv').value};if(tmpImg!==undefined)p.img=tmpImg;upd(id,p);cm();rE();toast('Guardado ✓')}
+const delEx=id=>{const e=G(id);ask('¿Seguro que querés eliminar «'+esc(e.n)+'»? Esta acción no se puede deshacer.',()=>{if(e.custom)S.ex=S.ex.filter(x=>x.id!=id);else S.hid.push(id);sv();rE();toast('Ejercicio eliminado')})};
+// creator
+function spv(){$('xs').innerHTML=''}
+function addEx(){const n=$('xn').value.trim();if(!n)return toast('Falta el nombre');
+ S.ex.push({id:'x'+Date.now(),n,ap:$('xa').value,lv:$('xl').value,d:$('xd').value,sp:[],img:tmpImg||'',custom:1});tmpImg='';$('xn').value='';$('xd').value='';dz('dzc');sv();toast('Ejercicio creado ✓ (está en Ejercicios)')}
+// zoom al mantener apretado: ampliacion a pantalla completa sin recortar la imagen
+(()=>{const z=document.createElement('div');z.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;background:#000f;display:none;align-items:center;justify-content:center;z-index:9999;pointer-events:none';document.body.appendChild(z);let t=null;
+const hide=()=>{clearTimeout(t);z.style.display='none';z.innerHTML=''};
+document.addEventListener('pointerdown',e=>{const i=e.target;if(i.tagName!='IMG'||!(i.classList.contains('th')||i.classList.contains('im')))return;clearTimeout(t);t=setTimeout(()=>{z.innerHTML=`<img src="${i.src}" style="width:100vw;height:100vh;height:100dvh;max-width:100vw;max-height:100dvh;object-fit:contain;display:block">`;z.style.display='flex'},350)});
+['pointerup','pointercancel','pointerleave'].forEach(v=>document.addEventListener(v,hide,true));
+document.addEventListener('contextmenu',e=>{if(e.target.tagName=='IMG')e.preventDefault()});
+document.addEventListener('dragstart',e=>{if(e.target.tagName=='IMG')e.preventDefault()});})();
+// init
+$('xa').innerHTML=AP.map(a=>`<option>${a}</option>`).join('');
+$('fl').innerHTML=['Todos','Principiante','Intermedio','Avanzado'].map(a=>`<option>${a}</option>`).join('');
+spv();fillStudentSelect();go('b');
+</script></body></html>
